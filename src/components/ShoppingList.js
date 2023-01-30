@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-// import { v4 as uuidv4 } from 'uuid';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ItemModal from './ItemModal'
 
 export default function ShoppingList() {
   let [items, setItems] = useState([])
-  let [trigger, setTrigger] = useState(0)
 
   const getItems = async () => {
     const res = await fetch('/api/items')
@@ -14,11 +13,11 @@ export default function ShoppingList() {
     setItems(data)
   }
 
-  const addItem = async () => {
-    const name = prompt('Enter some text');
-    if (name) {
-      console.log("add name" + name)
-    }
+  useEffect(() => {
+    getItems()
+  }, [])
+
+  const addItem = async (name) => {
 
     fetch('/api/items', {
       method: "post",
@@ -31,9 +30,9 @@ export default function ShoppingList() {
       })
     })
       .then(res => res.json())
-      .then(data => console.log(data))
-
-      setTrigger(trigger += 1)
+      .then(data => {
+        getItems()
+      })
 
   }
 
@@ -46,57 +45,29 @@ export default function ShoppingList() {
       }
     })
       .then(res => res.json())
-      .then(data => console.log(data))
-
-      setTrigger(trigger += 1)
-    //setItems(items => items.filter((item) => item._id !== _id))
+      .then(data => {
+        getItems()
+      })
   }
 
-
-  useEffect(() => {
-    getItems()
-  }, [trigger])
-
   console.log("---items", items)
-
 
   return (
     <Container style={{ marginTop: '2rem' }}>
       <div style={{ marginBottom: '1rem' }}>
         <TransitionGroup className="shoppingList">
           {items.map(({ _id, name }) => (
-            <CSSTransition
-              key={_id}
-              timeout={600}
-              classNames="item"
-            >
-
+            <CSSTransition key={_id} timeout={600} classNames="item">
               <div>
-                <Button
-                  style={{ margin: '1rem' }}
-                  className="remove-btn"
-                  color="danger"
-                  size="sm"
-                  onClick={() => deleteItem(_id)}>
-                  &times;
-                </Button>
-                {name}
+                <Button style={{ margin: '1rem' }} className="remove-btn" 
+                  color="danger" size="sm" onClick={() => deleteItem(_id)}>&times;
+                </Button> {name}
               </div>
-
             </CSSTransition>
           ))}
         </TransitionGroup>
       </div>
-      <Button color="dark"
-        onClick={addItem}
-      >
-        Add Item
-      </Button>
-      {/* <Button color="success"
-        onClick={getItems}
-      >
-        Get Items
-      </Button> */}
+      <ItemModal addItem={addItem} />
     </Container>
   );
 }
