@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LogInModal from './LogInModal'
+import RegisterModal from './RegisterModal'
 import {
   Collapse,
   Navbar,
@@ -23,6 +24,7 @@ function AppNavbar(args) {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <LogInModal />
+            <RegisterModal />
             <UncontrolledDropdown nav inNavbar>
             </UncontrolledDropdown>
           </Nav>

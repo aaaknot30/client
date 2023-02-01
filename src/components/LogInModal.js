@@ -18,6 +18,7 @@ function LogInModal() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const toggle = () => setModal(!modal);
 
@@ -28,8 +29,14 @@ function LogInModal() {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     logInUser(name, email, password);
-    toggle();
   };
+
+
+  const logOut = async () => {
+    console.log('Logout')
+    setLoggedIn(false)
+    //localStorage.removeItem('token')
+  }
 
 
   const logInUser = async (name, email, password) => {
@@ -48,9 +55,12 @@ function LogInModal() {
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        if(data.conatins('msg')) {
+        if(data.msg) {
           setErrorMsg(data.msg)
-          console.log('data has msg')
+        } else {
+          setLoggedIn(true)
+          localStorage.setItem('token', data.token);
+          toggle();
         }
         
       })
@@ -59,9 +69,12 @@ function LogInModal() {
 
   return (
     <div>
-      <NavLink onClick={toggle} href="#">
-        LogIn
-      </NavLink>
+      {
+        loggedIn ? 
+        <NavLink onClick={logOut} href="#">LogOut</NavLink> : 
+        <NavLink onClick={toggle} href="#">LogIn</NavLink>
+      } 
+      
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Register</ModalHeader>
         <ModalBody>
@@ -89,7 +102,7 @@ function LogInModal() {
                 type="password"
                 name="passwor"
                 id="password"
-                placeholder="Name"
+                placeholder="Password"
                 onChange={handlePasswordChangeName}
               />
               <Button color="dark" style={{ marginTop: '2rem' }} block>
