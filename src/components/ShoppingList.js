@@ -4,8 +4,10 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ItemModal from './ItemModal'
 
+
 export default function ShoppingList() {
   let [items, setItems] = useState([])
+
 
   const getItems = async () => {
     const res = await fetch('/api/items')
@@ -17,8 +19,8 @@ export default function ShoppingList() {
     getItems()
   }, [])
 
-  const addItem = async (name) => {
 
+  const addItem = async (name) => {
     fetch('/api/items', {
       method: "post",
       headers: {
@@ -33,9 +35,9 @@ export default function ShoppingList() {
       .then(data => {
         getItems()
       })
-
   }
 
+  
   const deleteItem = async (_id) => {
     fetch(`/api/items/${_id}`, {
       method: "delete",

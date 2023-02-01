@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
+import LogInModal from './LogInModal'
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
   UncontrolledDropdown
 } from 'reactstrap';
 
@@ -15,6 +14,7 @@ function AppNavbar(args) {
 
   const toggle = () => setIsOpen(!isOpen);
 
+
   return (
     <div>
       <Navbar {...args} color="dark" dark expand="sm">
@@ -22,11 +22,7 @@ function AppNavbar(args) {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
-            <NavItem>
-              <NavLink href="http://reactcommunity.org/react-transition-group/transition-group">
-                React Transition Group
-              </NavLink>
-            </NavItem>
+            <LogInModal />
             <UncontrolledDropdown nav inNavbar>
             </UncontrolledDropdown>
           </Nav>
